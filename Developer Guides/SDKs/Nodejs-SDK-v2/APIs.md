@@ -549,4 +549,542 @@ console.log('Following tokens', followingTokens);
 console.log('Following token ids', account.privacyTokenIds);
 ```
 
+unfollowTokenById - Remove a token id from the following list
 
+Usage:
+
+```
+unfollowTokenById(tokenId: string) => void
+```
+
+Example:
+
+```
+// unfollow pBTC
+account.unfollowTokenById("b832e5d3b1f01a4f0623f7fe91d6673461e1f5d37d91fe78c5c2e6183ff39696");
+
+const followingTokens = await account.getFollowingPrivacyToken();
+console.log('Following tokens', followingTokens);
+console.log('Following token ids', account.privacyTokenIds);
+```
+
+issuePrivacyToken - Issue new Incognito token
+
+Usage:
+
+```
+issuePrivacyToken({
+    tokenName: string,
+    tokenSymbol: string,
+    supplyAmount: number,
+    nativeTokenFee: number
+}) => Promise<TxHistoryModel>
+```
+
+Example:
+
+```
+const history = await account.issuePrivacyToken({
+    tokenName: 'test token',
+    tokenSymbol: 'test',
+    supplyAmount: 100000,
+    nativeTokenFee: 20 // fee in nano PRV
+});
+
+console.log('Issued new token with history', history);
+```
+
+getFollowingPrivacyToken - Get following token(s), if `tokenId` is not provided; all tokens will be returned.
+
+Usage:
+
+```
+getFollowingPrivacyToken(tokenId?: string)
+    =>  Promise<PrivacyTokenInstance | PrivacyTokenInstance[]>
+```
+
+Example:
+
+```
+// Get all following tokens
+const tokens = await account.getFollowingPrivacyToken();
+console.log('All following tokens', tokens);
+
+// Get follow token info with ID
+const token = await account.getFollowingPrivacyToken('token-id');
+console.log('Token info', token);
+```
+
+getNodeRewards - Pull node rewards
+
+Usage:
+
+```
+getNodeRewards() => Promise<object>
+```
+
+Example:
+
+```
+const rewards = await account.getNodeRewards();
+console.log('All rewards', rewards);
+```
+
+getNodeStatus - Pull node status
+
+Usage:
+
+```
+getNodeStatus() => Promise<object>
+```
+
+Example:
+
+```
+const status = await account.getNodeStatus();
+console.log('Node status', status);
+```
+
+NativeTokenInstance
+
+Public Property | Type | Default Value | Description
+:--- | :---: | :---: | :---
+isNativeToken | boolean | true | Is Native Token?
+name | string | | Token Name
+tokenId | string | | Token ID
+symbol | string | | Token Symbol
+accountKeySet | AccountKeySetModel | | Account Key Set
+
+getTotalBalance - Get total balance (including pending coins)
+
+Usage:
+
+```
+getTotalBalance() => Promise<BigNumber>
+```
+
+Example:
+
+```
+const balanceBN = await account.nativeToken.getTotalBalance();
+console.log('Native token total balance', balanceBN.toNumber());
+```
+
+getAvailableBalance - Pull available balance
+
+Usage:
+
+```
+getAvaiableBalance() => Promise<BigNumber>
+```
+
+Example:
+
+```
+const balanceBN = await account.nativeToken.getAvaiableBalance();
+console.log('Native token available balance', balanceBN.toNumber());
+```
+
+getTxHistories - Get all transaction histories (cached on  local)
+
+Usage:
+
+```
+getTxHistories() => Promise<TxHistoryModel[]>
+```
+
+Example:
+
+```
+const histories = await account.nativeToken.getTxHistories();
+console.log('Native token tx histories', histories);
+```
+
+transfer - Send native token on Incognito chain
+
+Usage:
+
+```
+transfer(paymentInfoList: PaymentInfoModel[], nativeFee: number)
+    => Promise<TxHistoryModel>
+```
+
+Example:
+
+```
+const history = await account.nativeToken.transfer(
+    [
+        {
+            paymentAddressStr: otherAccount.key.keySet.paymentAddressKeySerialized,
+            amount: 10,
+            message: ''
+        }
+    ],
+    20 // fee in nano PRV
+);
+console.log('Native token sent with history', history);
+```
+
+requestStaking - Send staking request
+
+Usage:
+
+```
+requestStaking(rewardReceiverPaymentAddress: string, nativeFee: number)
+    => Promise<TxHistoryModel>
+```
+
+Example:
+
+```
+const history = await account.nativeToken.requestStaking(
+    receiverAccount.key.keySet.paymentAddressKeySerialized,
+    20 // fee in nano PRV
+);
+console.log('Native token sent stake request with history', history);
+```
+
+pdeContribution - [pDEX] Send PDE contribution
+
+Usage:
+
+```
+pdeContribution(
+    pdeContributionPairID: string,
+    contributedAmount: number,
+    nativeFee: number
+) => Promise<TxHistoryModel>
+```
+
+requestTrade - Send trade request
+
+Usage:
+
+```
+requestTrade (
+    tokenIdBuy: string,
+    sellAmount: number,
+    minimumAcceptableAmount: number,
+    nativeFee: number,
+    tradingFee: number
+) => Promise<TxHistoryModel>
+```
+
+withdrawNodeRewward - Withdraw rewards from node
+
+Usage:
+
+```
+withdrawNodeReward() => Promise<TxHistoryModel>
+```
+
+PrivacyTokenInstance
+
+Public Property | Type | Default Value | Description
+:--- | :---: | :---: | :---
+isPrivacyToken | boolean | true | Is Privacy Token?
+name | string | | Token Name
+tokenId | string | | Token ID
+symbol | string | | Token symbol in Incognito chain
+accountKeySet | AccountKeySetModel |  | Account Key Set
+totalSupply | number | | Total supply amount was issued
+bridgeInfo | object | | External informations form other chain for this token (only tokens have the `bridgeInfo` can deposit/withdraw
+
+bridgeInfo
+- symbol: string; // symbol in other chain
+- pSymbol: string; // bridge token symbol
+- name: string; // bridge token name
+- decimals: number; // decimals in other chain
+- pDecimals: number; // decimals in Incognito chain
+- contractID: string;
+- verified: boolean; // verified by Incognito
+- type: number; defined in TOKEN_INFO_CONSTANT.BRIDGE_PRIVACY_TOKEN.TYPE
+- currencyType: number; defined in TOKEN_INFO_CONSTANT.BRIDGE_PRIVACY_TOKEN.CURRENCY_TYPE
+- status: number;
+
+getTotalBalance - Pulls total balance (including pending coins)
+
+Usage:
+
+```
+getTotalBalance() => Promise<BigNumber>
+```
+
+Example:
+
+```
+const token = await account.getFollowingPrivacyToken('token-id');
+const balanceBN = await token.getTotalBalance();
+console.log('Token total balance', balanceBN.toNumber());
+```
+
+getAvailableBalance - Get available balance
+
+Usage:
+
+```
+getAvaiableBalance() => Promise<BigNumber>
+```
+
+Example:
+
+```
+const token = await account.getFollowingPrivacyToken('token-id');
+const balanceBN = await token.getAvaiableBalance();
+console.log('Token available balance', balanceBN.toNumber());
+```
+
+getTxHistories - Get all transaction histories (cached on local)
+
+Usage:
+
+```
+getTxHistories() => Promise<TxHistoryModel[]>
+```
+
+Example:
+
+```
+const token = await account.getFollowingPrivacyToken('token-id');
+const histories = await token.getTxHistories();
+console.log('Token tx histories', histories);
+```
+
+hasExchangeRate - Does the token have value, if true, then the token can be used for a fee
+
+Usage:
+
+```
+hasExchangeRate() => Promise<boolean>
+```
+
+Example:
+
+```
+const token = await account.getFollowingPrivacyToken('token-id');
+const isHasRate = await token.hasExchangeRate();
+
+console.log(`This token ${isHasRate === true ? 'has' : 'not has'} rate`);
+```
+
+transfer - Send privacy token on Incognito chain
+
+Usage:
+
+```
+transfer(
+    paymentInfoList: PaymentInfoModel[],
+    nativeFee: number,
+    privacyFee: number
+) => Promise<TxHistoryModel>
+```
+
+Example:
+
+```
+const token = await account.getFollowingPrivacyToken('token-id');
+const history = await token.transfer(
+    [
+        {
+            paymentAddressStr: otherAccount.key.keySet.paymentAddressKeySerialized,
+            amount: 10,
+            message: ''
+        }
+    ],
+    20, // fee in nano PRV
+    0 // the privacy token must has exchange rate to be fee
+);
+console.log('Privacy token sent with history', history);
+```
+
+burning - Burn a token
+
+Usage:
+
+```
+transfer(
+    outchainAddress: string,
+    burningAmount: number,
+    nativeFee: number,
+    privacyFee: number
+) => Promise<TxHistoryModel>
+```
+
+Example:
+
+```
+// burning ETH
+const token = await account.getFollowingPrivacyToken('peth-token-id');
+const history = await token.burning(
+    'ETH wallet address',
+    2000, // burning amount,
+    20, // fee in nano PRV
+    0 // the privacy token must has exchange rate to be fee
+);
+console.log('Privacy token burned with history', history);
+```
+
+pdeContribution - [pDEX] Send PDE Contribution
+
+Usage:
+
+```
+pdeContribution(
+    pdeContributionPairID: string,
+    contributedAmount: number,
+    nativeFee: number,
+    privacyFee: number
+) => Promise<TxHistoryModel>
+```
+
+requestTrade - Send Trade Request
+
+Usage:
+
+```
+requestTrade (
+    tokenIdBuy: string,
+    sellAmount: number,
+    minimumAcceptableAmount: number,
+    nativeFee: number,
+    privacyFee: number,
+    tradingFee: number
+) => Promise<TxHistoryModel>
+```
+
+withdrawNodeReward - Withdraw rewards from the node
+
+Usage:
+
+```
+withdrawNodeReward() => Promise<TxHistoryModel>
+```
+
+bridgeGenerateDepositAddress - Get a temporary deposit address (expired after 60 minutes)
+
+Usage:
+
+```
+bridgeGenerateDepositAddress() => Promise<string>
+```
+
+Example:
+
+```
+// deposit ETH
+const token = await account.getFollowingPrivacyToken('peth-token-id');
+const ethDepositAddress = await token.bridgeGenerateDepositAddress();
+
+console.log('ETH deposit address', ethDepositAddress);
+```
+
+bridgeWithdraw - Withdraw bridged coins (Convert privacy token to origin, your privacy token will be burned and the origin will be returned). Please notice: withdrawal uses the fee (nativeFee or privacyFee) for burning coins.
+
+Usage:
+
+```
+bridgeWithdraw(
+    outchainAddress: string,
+    decimalAmount: number,
+    nativeFee: number = 0,
+    privacyFee: number = 0,
+    memo?: string
+) => Promise
+```
+
+Example:
+
+```
+// withdraw 0.5 pETH to Ethereum wallet address "ETH-wallett-address'
+const token = await account.getFollowingPrivacyToken('peth-token-id');
+await token.bridgeWithdraw(
+    'ETH-wallett-address',
+    0.5,
+    20,
+    0
+);
+
+console.log('ETH withdrew');
+```
+
+bridgeGetHistory - Get deposit/withdrawal history
+
+Usage:
+
+```
+bridgeGetHistory() => Promise<BridgeHistoryModel[]>
+```
+
+## KeyWalletModel
+
+Public Property | Type | Default Value | Description
+:--- | :---: | :---: | :---
+keySet | AccountKeySetModel | | Account Key Set
+
+## AccountKeySetModel
+
+Public Property | Type | Default Value | Description
+:--- | :---: | :---: | :---
+privateKeySerialized | string  | | Private key
+paymentAddressKeySerialized | string | | Payment address
+viewingKeySerialized | String | | Viewing key
+publicKeySerialized | string | | Public key
+privateKey | PrivateKeyModel | | Private key byte
+paymentAddress | PaymentAddressKeyModel | | Payment address key byte
+viewingKey | ViewingKeyModel | | Viewing key byte 
+publicKeyCheckEncode | string | |
+miningSeedKey | string | |
+validatorKey | string | |
+
+## TxHistoryModel
+
+Tx histories include all transaction histories, not deposit and withdraw and stored in client storage.
+
+Public Property | Type | Description
+:--- | :---: | :---
+txId | string |
+txType | string | Define in CONSTANT.TX_CONSTANT.TX_TYPE
+lockTime | number | 
+status | number | Define in CONSTANT.TX_CONSTANT.TX_STATUS. Call historyServices.checkCachedHistories() to update status.
+nativeTokenInfo | object | Include native token info (fee, amount, coins, payment info)
+privacyTokenInfo | object | Include privacy token info (fee, amount, coins, payment info)
+meta | any |
+accountPublicKeySerialized | string
+historyType | number | Define in CONSTANT.TX_CONSTANT.HISTORY_TYPE
+
+## PaymentInfoModel
+
+Public Property | Type | Description
+:--- | :---: | :---
+paymentAddressStr | string | 
+amount | number |
+message | string |
+
+## BridgeHistoryModel
+
+Bridge histories include deposit and withdraw transactions and stored in backend.
+
+Public Property | Type | Description
+:--- | :---: | :---
+id | number |
+userID | number |
+address | string |
+expiredAt | string |
+addressType | number | defined in TOKEN_INFO_CONSTANT.BRIDGE_PRIVACY_TOKEN.ADDRESS_TYPE
+status | number | defined in TOKEN_INFO_CONSTANT.BRIDGE_PRIVACY_TOKEN.HISTORY_STATUS
+currencyType | number | defined in TOKEN_INFO_CONSTANT.BRIDGE_PRIVACY_TOKEN.CURRENCY_TYPE
+walletAddress | string |
+userPaymentAddress | string |
+requestedAmount | string |
+receivedAmount | string |
+incognitoAmount | string |
+ethereumTx | string |
+incognitoTx | string |
+erc20TokenTx | string |
+privacyTokenAddress | string |
+erc20TokenAddress | string |
+createdAt | string |
+updatedAt | string |
+decentralized | number | 0 is centralized, 1 is decentralized
+outChainTx | string |
+inChainTx | string |
