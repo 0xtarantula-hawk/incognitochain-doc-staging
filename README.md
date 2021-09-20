@@ -1,1 +1,4 @@
-# incognitochain-doc-staging
+# Welcome to Incognito
+## Privacy chain for all
+
+Enter opener
