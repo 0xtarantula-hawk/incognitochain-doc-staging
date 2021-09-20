@@ -29,7 +29,7 @@ Make sure you start project at port default of 3000, try to get file via link:
 
 #### App.js
 
-```bash
+```javascript
 import logo from './logo.svg';
 import './App.css';
 import React, { useState, useEffect } from 'react';
@@ -108,7 +108,7 @@ export default App;
 
 #### SDK
 
-```bash
+```javascript
 import * as incognitoJs from 'incognito-js/build/web/browser';
 
 await incognitoJs.setConfig ({
