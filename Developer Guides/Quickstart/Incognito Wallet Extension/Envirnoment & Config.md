@@ -4,7 +4,7 @@
 
 Basic envirnoment setup & project start file `.env`
 
-```bash
+```
 SKIP_PREFLIGHT_CHECK=true
 REACT_APP_PASSPHRASE_WALLET_DEFAULT=7as90_jasLsS
 REACT_APP_DOMAIN_URL=http://localhost:3000
