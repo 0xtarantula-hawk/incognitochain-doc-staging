@@ -4,21 +4,21 @@ Withdraw trading fees from pDEX
 
 #### Parameters
 
-1. **string** - private key (note: this RPC requires to reveal private key so only use it if you trust full-node you're calling to)
-2. **map** - receive info:
-- **key**: **string** - receiver's address, this must be burning address
-- **value**: **string** - trade amount
-3. **number** - network fee per kilobyte (in nano PRV)
-4. **number** - privacy or not (if > 0 then privacy else no privacy), this must be less than 1
-5. **object** - metadata info:
-- **WithdrawerAddrssStr**: **string** - withdrawer's payment address 
-- **WithdrawalToken1IDStr**: **string** - pToken1's ID on withdrawing pair 
-- **WithdrawalToken2IDStr**: **string** - pToken2's ID on withdrawing pair 
-- **WithdrawalFeeAmt**: **string** - withdrawing share amount
+- **string** - private key (note: this RPC requires to reveal private key so only use it if you trust full-node you're calling to)
+- **map** - receive info:
+  - **key**: **string** - receiver's address, this must be burning address
+  - **value**: **string** - trade amount
+- **number** - network fee per kilobyte (in nano PRV)
+- **number** - privacy or not (if > 0 then privacy else no privacy), this must be less than 1
+- **object** - metadata info:
+  - **WithdrawerAddrssStr**: **string** - withdrawer's payment address 
+  - **WithdrawalToken1IDStr**: **string** - pToken1's ID on withdrawing pair 
+  - **WithdrawalToken2IDStr**: **string** - pToken2's ID on withdrawing pair 
+  - **WithdrawalFeeAmt**: **string** - withdrawing share amount
 
 Example
  Request body:
-
+```javascript
 {
     "id": 1,
     "jsonrpc": "1.0",
@@ -36,8 +36,10 @@ Example
         }
     ]
 }
-Response body:
+```
 
+Response body:
+```javascript
 {
     "Id": 1,
     "Result": {
@@ -51,22 +53,17 @@ Response body:
     "Method": "createandsendtxwithpdefeewithdrawalreq",
     "Jsonrpc": "1.0"
 }
+```
 Response Description:
 
-object - Response payload, "Error" field would be not null if an error occurs, otherwise "Result" field would be not null.
+**object** - Response payload, "Error" field would be not null if an error occurs, otherwise "Result" field would be not null.
 
-Result: object - result info:
+- Result: object - result info:
+  - TxID: string - transaction id
+  - ShardID: number - shard id that the transaction sends to
+- Error: object - error info:
+  - Code: number - error code
+  - Message: string - error message
+  - StackTrace: string - error stack trace
 
-TxID: string - transaction id
 
-ShardID: number - shard id that the transaction sends to
-
-Error: object - error info:
-
-Code: number - error code
-
-Message: string - error message
-
-StackTrace: string - error stack trace
-
-​
