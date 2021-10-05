@@ -1,4 +1,7 @@
-#### ⚠️ pNode production has been haulted due to supply chain shortages due to the Coronavirus pandemic. pNodes are discontinued. It is unlikely production will resume. Community members are encouraged to run vNodes as an alternative. Read about it here: 
+#### ⚠️NOTICE: pNode production has been haulted due to supply chain shortages due to the Coronavirus pandemic. pNodes are discontinued. It is unlikely production will resume. Community members are encouraged to run vNodes as an alternative. Read about it here: 
+
+### pNode documentation provided as reference only.
+---
 
 The Process
 Designing the shape.
