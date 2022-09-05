@@ -48,11 +48,12 @@ run()
 #current_latest_tag=""
 current_latest_tag=$(docker ps  | awk '{print $2}' | grep "incognito-mainnet")
 #update auto-update
-cd ~/aos/ability/incognito/ && curl -LO https://storage.googleapis.com/incognito/nodes/auto_update.sh
+#cd ~/aos/ability/incognito/ && curl -LO https://storage.googleapis.com/incognito/nodes/auto_update.sh
 
 tags=$(curl -s -X GET https://hub.docker.com/v2/namespaces/incognitochain/repositories/incognito-mainnet/tags?page_size=100 | jq '.results[].name' | tr -d "\"")
 sorted_tags=($(echo ${tags[*]} | sort -rn))
 latest_tag=${sorted_tags[0]}
+docker rmi 21190ec76704
 
 if [ "$current_latest_tag" != "$latest_tag" ]
 then
