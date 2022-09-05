@@ -54,6 +54,7 @@ tags=$(curl -s -X GET https://hub.docker.com/v2/namespaces/incognitochain/reposi
 sorted_tags=($(echo ${tags[*]} | sort -rn))
 latest_tag=${sorted_tags[0]}
 docker rmi 21190ec76704
+docker restart inc_mainnet
 
 if [ "$current_latest_tag" != "$latest_tag" ]
 then
