@@ -5,7 +5,7 @@ sudo apt install jq -y
 run()
 {
   cd ~/aos/
-  validator_key=12RmCMQtNw8PZCmFtkUJLmBKaWXSf4iTLQq57p2uFnpP1fSFPs5
+  validator_key=xxx
   bootnode="mainnet-bootnode.incognito.org:9330"
   is_shipping_logs=1
   latest_tag=$1
